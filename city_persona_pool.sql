@@ -1,5 +1,5 @@
-#上海'V0310000'20180501
-#table
+--上海'V0310000'20180501
+--table
 create table temp_bgy_20180805pf_sh as
 select tt.uid,tt.gender, tt.age, tt.area, tt.ptype, tt.gw,tt.lat,tt.lon,tt.is_core,
 cast(row_number() over(partition by 1) / 100000 as int) + 1 as slides
@@ -53,7 +53,13 @@ where s.date = 20180501 and s.city = 'V0310000'
 group by tt.uid,tt.gender, tt.age, tt.area, tt.ptype, tt.gw,tt.lat,tt.lon,tt.is_core
 ;
 
-#test
+--test
 select sum(t.gw) from temp_bgy_20180805pf_sh t
 where t.is_core = 'Y' and t.ptype = 1
 group by t.uid;
+
+
+--1250*1250,3 spot
+select t.gender,t.age,t.ptype,t.is_core,t.lat,t.lon,sum(t.gw) from temp_bgy_20180805pf_sh t
+where t.lon in(183,184,185,186,187,149,150,151,152,153,328,329,330,331,332,111,112,113,114,115,211,212,213,214,215,202,203,204,205,206) and t.lat in(269,270,271,272,273,49,50,51,52,53,129,130,131,132,133,97,98,99,100,101,202,203,204,205,206)
+group by t.gender,t.age,t.ptype,t.is_core,t.lat,t.lon;
